@@ -2,8 +2,21 @@ import axios from 'axios';
 import RenderResult from 'next/dist/server/render-result';
 import { useEffect, useState } from 'react';
 import Seo from '../components/Seo'
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Home({ results }) {
+    const router = useRouter();
+    const imgClick = (id, title) => {
+        // router.push(`/movies/${id}`);
+        // router.push({
+        //     pathname: `/movies/${id}`,
+        //     query: {
+        //         title: title
+        //     }
+        // }, `/movies/${id}`)
+        router.push(`/movies/${title}/${id}`);
+    }
     // const [movies, setMovies] = useState([]);
     // useEffect(() => {
     //     //async fetch 방식
@@ -30,8 +43,12 @@ export default function Home({ results }) {
             {/* {!movies && <h4>Loading...</h4>} */}
             {results?.map(movie => (
                 <div className="movie" key={movie.id}>
-                    <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-                    <h4>{movie.original_title}</h4>
+                    <img onClick={() => { imgClick(movie.id, movie.original_title) }} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
+                    <h4>
+                        <Link href={`/movies/${movie.original_title}/${movie.id}`}>
+                            <a>{movie.original_title}</a>
+                        </Link>
+                    </h4>
                 </div>
             ))
             }
